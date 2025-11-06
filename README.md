@@ -1,5 +1,5 @@
 <div align=center>
-<img width=64 src="resources/huskarui_icon.svg">
+<img width=64 src="res/example.png">
 
 # 「 QFluentKit」 一个 Qt-Widget 的 FluentUI 组件库
 
