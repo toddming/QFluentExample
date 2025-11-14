@@ -22,6 +22,7 @@ Qt Widget 的 FluentUI 组件库
 
 - 使用QFluent构建, 该库暂未开源
 - main分支采用Qt 6.8.3 MSVC2022 64bit构建
+- 支持Qt 5.15+ MSVC MinGW 编译
 - QQ 1912229135
 
 ## 在线演示
@@ -39,4 +40,4 @@ Qt Widget 的 FluentUI 组件库
 
 ## 环境
 
-Windows 11, Qt Version >= 6.5
+Windows 10+, Qt Version >= 5.15
