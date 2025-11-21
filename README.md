@@ -28,17 +28,17 @@
 
 ## 📦 依赖与参考
 
-- 核心窗口管理：QWindowKit
-- 设计灵感来源：PyQt-Fluent-Widgets
+- 核心窗口管理：[QWindowKit](https://github.com/stdware/qwindowkit)
+- 设计灵感来源：[PyQt-Fluent-Widgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets)
 
 ## 📺 在线演示
 
-想先看看效果？欢迎观看 Bilibili 演示视频！
+想先看看效果？欢迎观看 [Bilibili 演示视频](bilibili.com/video/BV1QKCuBHEyX/)！
 
 ## 📄 许可证
 
-本项目采用**自定义免费使用许可**。
-免费供个人和商业项目使用。
-基于 Qt 开源版（LGPL）开发。
-保留版权、禁止反编译、免责。
-完整许可条款请参阅项目根目录下的 `LICENSE` 文件。
+- 本项目采用**自定义免费使用许可**。
+- 免费供个人和商业项目使用。
+- 基于 Qt 开源版（LGPL）开发。
+- 保留版权、禁止反编译、免责。
+- 完整许可条款请参阅项目根目录下的 `LICENSE` 文件。
