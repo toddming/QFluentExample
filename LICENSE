@@ -1,0 +1,41 @@
+QFluentKit Free Binary License
+Version 1.0, 2025
+
+Copyright (c) 2025 Todd. All rights reserved.
+
+This license applies solely to the compiled binary form of QFluentKit 
+(e.g., QFluentKit.dll, libQFluentKit.so, or other distributed binary files). 
+The source code of QFluentKit is not provided and remains proprietary.
+
+GRANT OF LICENSE:
+You are hereby granted a free, non-exclusive, worldwide, royalty-free right to:
+- Use QFluentKit in your applications, whether for personal, educational, or commercial purposes;
+- Distribute the QFluentKit binary alongside your application, provided that this license file 
+  and the above copyright notice are included unmodified in your distribution.
+
+RESTRICTIONS:
+You may NOT:
+- Reverse engineer, decompile, disassemble, or otherwise attempt to derive the source code;
+- Modify, adapt, merge, or create derivative works based on QFluentKit;
+- Redistribute QFluentKit as a standalone library, software development kit (SDK), 
+  or as part of a competing product without explicit written permission from the author.
+
+DISCLAIMER OF WARRANTY:
+QFLUENTKIT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR OR COPYRIGHT HOLDER BE LIABLE 
+FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, 
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE USE OF OR INABILITY TO USE 
+QFLUENTKIT.
+
+NOTICE REGARDING Qt:
+QFluentKit is built using the Qt framework, which is licensed under the GNU Lesser 
+General Public License (LGPL) version 3. As required by the LGPL, you have the right to:
+- Obtain the complete corresponding source code of the Qt libraries used by QFluentKit 
+  from https://www.qt.io/ or https://code.qt.io/;
+- Replace the Qt libraries with a modified or updated version compatible with QFluentKit.
+
+This license does not impose any open-source obligations on your own application, 
+provided you comply with the terms of the Qt LGPL regarding dynamic linking.
+
+—— End of License ——
