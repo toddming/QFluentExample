@@ -1,19 +1,18 @@
-﻿#ifndef EDITABLECOMBOBOX_H
-#define EDITABLECOMBOBOX_H
+﻿#pragma once
 
 #include <QVector>
 #include <QIcon>
 
 #include "LineEdit.h"
-#include "Property.h"
+#include "FluentGlobal.h"
 
 class ComboBoxMenu;
 class EditableComboBoxPrivate;
 class QFLUENT_EXPORT EditableComboBox : public LineEdit
 {
     Q_OBJECT
-    Q_Q_CREATE(EditableComboBox)
-    Q_PROPERTY_CREATE_Q_H(int, MaxVisibleItems)
+    Q_DECLARE_PRIVATE_D(d_ptr, EditableComboBox)
+
 public:
     explicit EditableComboBox(QWidget *parent = nullptr);
     ~EditableComboBox();
@@ -21,13 +20,13 @@ public:
     // 添加项目
     void addItem(const QString &text,
                 const QIcon &icon = QIcon(),
-                const QVariant &userData = QVariant(NULL));
+                const QVariant &userData = {});
     void addItems(const QStringList &texts);
 
     // 插入项目
     void insertItem(int index, const QString &text,
                    const QIcon &icon = QIcon(),
-                   const QVariant &userData = QVariant(NULL));
+                   const QVariant &userData = {});
     void insertItems(int index, const QStringList &texts);
 
     // 移除项目
@@ -61,6 +60,11 @@ public:
 
     void setCompleterMenu(CompleterMenu *menu);
 
+    void setMaxVisibleItems(int count);
+
+    int getMaxVisibleItems();
+
+
 signals:
     void currentIndexChanged(int index);
     void currentTextChanged(const QString &text);
@@ -70,7 +74,9 @@ signals:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    bool eventFilter(QObject *watched, QEvent *event) override;    
-};
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
-#endif // EDITABLECOMBOBOX_H
+private:
+    QScopedPointer<EditableComboBoxPrivate> d_ptr;
+
+};

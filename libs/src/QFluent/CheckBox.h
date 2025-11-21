@@ -2,12 +2,13 @@
 
 #include <QCheckBox>
 
-#include "Property.h"
+#include "FluentGlobal.h"
 
+class QEnterEvent;
 class CheckBoxPrivate;
 class QFLUENT_EXPORT CheckBox : public QCheckBox {
     Q_OBJECT
-    Q_Q_CREATE(CheckBox)
+    Q_DECLARE_PRIVATE_D(d_ptr, CheckBox)
 
 public:
     explicit CheckBox(QWidget *parent = nullptr);
@@ -17,8 +18,14 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     void enterEvent(QEnterEvent *event) override;
+#else
+    void enterEvent(QEvent *event) override;
+#endif
     void leaveEvent(QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
+private:
+    QScopedPointer<CheckBoxPrivate> d_ptr;
 };

@@ -15,7 +15,7 @@
 #include <QMouseEvent>
 
 #include "Theme.h"
-#include "Property.h"
+#include "FluentGlobal.h"
 #include "StyleSheet.h"
 
 
@@ -53,7 +53,7 @@ public:
 
         _isSelectRightClickedRow(false) {
 
-        StyleSheetManager::instance()->registerWidget(this, ThemeType::ThemeStyle::TABLE_VIEW);
+        StyleSheetManager::instance()->registerWidget(this, Fluent::ThemeStyle::TABLE_VIEW);
 
         this->setShowGrid(false);
         this->setMouseTracking(true);

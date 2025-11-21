@@ -11,7 +11,7 @@
 #include "QFluent/progress/IndeterminateProgressRing.h"
 
 StatusInfoInterface::StatusInfoInterface(QWidget *parent)
-    : GalleryInterface("状态", "qfluentwidgets.components.widgets", parent)
+    : GalleryInterface("状态", "", parent)
 {
     setObjectName("StatusInfoInterface");
 
@@ -24,22 +24,24 @@ StatusInfoInterface::StatusInfoInterface(QWidget *parent)
     auto btn5 = new PushButton("底部居中", w);
     auto btn6 = new PushButton("左下角", w);
     connect(btn1, &PushButton::clicked, this, [=](){
-        InfoBar::info("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, InfoBarType::BarPosition::TOP_RIGHT, this);
+        InfoBar::info("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, Fluent::MessagePosition::TOP_RIGHT, this);
     });
     connect(btn2, &PushButton::clicked, this, [=](){
-        InfoBar::success("你看", "我有几分像从前?", Qt::Horizontal, true, 2000, InfoBarType::BarPosition::TOP, this);
+        InfoBar::success("你看", "我有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分"
+                               "有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分有几分像从前?",
+                         Qt::Horizontal, true, 2000, Fluent::MessagePosition::TOP, this);
     });
     connect(btn3, &PushButton::clicked, this, [=](){
-        InfoBar::warning("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, InfoBarType::BarPosition::TOP_LEFT, this);
+        InfoBar::warning("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, Fluent::MessagePosition::TOP_LEFT, this);
     });
     connect(btn4, &PushButton::clicked, this, [=](){
-        InfoBar::error("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, InfoBarType::BarPosition::BOTTOM_RIGHT, this);
+        InfoBar::error("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, Fluent::MessagePosition::BOTTOM_RIGHT, this);
     });
     connect(btn5, &PushButton::clicked, this, [=](){
-        InfoBar::success("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, InfoBarType::BarPosition::BOTTOM, this);
+        InfoBar::success("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, Fluent::MessagePosition::BOTTOM, this);
     });
     connect(btn6, &PushButton::clicked, this, [=](){
-        InfoBar::warning("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, InfoBarType::BarPosition::BOTTOM_LEFT, this);
+        InfoBar::warning("你看", "我有几分像从前?", Qt::Horizontal, false, 2000, Fluent::MessagePosition::BOTTOM_LEFT, this);
     });
     hBoxLayout->addWidget(btn1);
     hBoxLayout->addWidget(btn2);
@@ -92,7 +94,7 @@ QWidget* StatusInfoInterface::createProgressWidget(QProgressBar *widget)
     hBoxLayout->addWidget(spinBox);
     setContentsMargins(0, 0, 0, 0);
 
-    connect(spinBox, &SpinBox::valueChanged, this, [this, widget](int value){
+    connect(spinBox, QOverload<int>::of(&SpinBox::valueChanged), this, [this, widget](int value){
         widget->setValue(value);
     });
 

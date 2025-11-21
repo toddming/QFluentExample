@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "QFluent/ScrollArea.h"
-#include "QFluent/scrollbar/ScrollBar.h"
 #include "QFluent/layout/ExpandLayout.h"
 
 class SettingInterface : public ScrollArea
@@ -13,4 +12,6 @@ public:
 private:
     QWidget *m_scrollWidget;
     ExpandLayout *m_expandLayout;
+
+    void initConf();
 };

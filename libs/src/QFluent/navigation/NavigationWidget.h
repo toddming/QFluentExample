@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QScrollArea>
 
-#include "Define.h"
+#include "FluentGlobal.h"
 #include "FluentIcon.h"
 
 // NavigationWidget
@@ -33,7 +33,11 @@ signals:
     void selectedChanged(bool selected);
 
 protected:
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     void enterEvent(QEnterEvent* e) override;
+#else
+    void enterEvent(QEvent* e) override;
+#endif
     void leaveEvent(QEvent* e) override;
     void mousePressEvent(QMouseEvent* e) override;
     void mouseReleaseEvent(QMouseEvent* e) override;
@@ -47,7 +51,7 @@ private:
     NavigationWidget* m_treeParent;
     QColor lightTextColor;
     QColor darkTextColor;
-    int m_expandWidth{160};
+    int m_expandWidth;
 
 };
 
@@ -87,6 +91,7 @@ public:
     void setCompacted(bool isCompacted) override;
 };
 
+// NavigationSeparator
 class NavigationSeparator : public NavigationWidget {
     Q_OBJECT
 public:
@@ -168,6 +173,8 @@ public:
     std::vector<NavigationTreeWidget*> treeChildren();
     NavigationTreeItem* itemWidget();
 
+    void setExpandWidth(int width);
+
 signals:
     void expanded();
 
@@ -215,13 +222,13 @@ private:
 
 
 // NavigationAvatarWidget
-class NavigationAvatarWidget : public NavigationWidget
+class QFLUENT_EXPORT NavigationAvatarWidget : public NavigationWidget
 {
     Q_OBJECT
 
 public:
     explicit NavigationAvatarWidget(const QString &name,
-                                    const QVariant &avatar = NULL,
+                                    const QVariant &avatar = {},
                                     QWidget *parent = nullptr);
 
     void setName(const QString &name);

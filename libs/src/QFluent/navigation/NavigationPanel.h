@@ -4,11 +4,10 @@
 #include <QFrame>
 #include <QVBoxLayout>
 
-#include "Define.h"
+#include "FluentGlobal.h"
 #include "FluentIcon.h"
 
 class QScrollArea;
-class ProfileCard;
 class NavigationWidget;
 class QPropertyAnimation;
 class NavigationToolButton;
@@ -41,26 +40,26 @@ public:
     NavigationWidget* widget(const QString& routeKey);
     void addItem(const QString& routeKey, const FluentIconBase& icon, const QString& text,
                  const std::function<void()>& onClick = nullptr, bool selectable = true,
-                 NavigationType::NavigationItemPosition position = NavigationType::NavigationItemPosition::TOP,
+                 Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP,
                  const QString& tooltip = QString(), const QString& parentRouteKey = QString());
 
     void addWidget(const QString& routeKey, NavigationWidget* widget,
                    const std::function<void()>& onClick = nullptr,
-                   NavigationType::NavigationItemPosition position = NavigationType::NavigationItemPosition::TOP,
+                   Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP,
                    const QString& tooltip = QString(), const QString& parentRouteKey = QString());
 
     void insertItem(int index, const QString& routeKey, const FluentIconBase& icon, const QString& text,
-                   const std::function<void()>& onClick = nullptr, bool selectable = true,
-                   NavigationType::NavigationItemPosition position = NavigationType::NavigationItemPosition::TOP,
-                   const QString& tooltip = QString(), const QString& parentRouteKey = QString());
+                    const std::function<void()>& onClick = nullptr, bool selectable = true,
+                    Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP,
+                    const QString& tooltip = QString(), const QString& parentRouteKey = QString());
 
     void insertWidget(int index, const QString& routeKey, NavigationWidget* widget,
-                     const std::function<void()>& onClick = nullptr,
-                     NavigationType::NavigationItemPosition position = NavigationType::NavigationItemPosition::TOP,
-                     const QString& tooltip = QString(), const QString& parentRouteKey = QString());
+                      const std::function<void()>& onClick = nullptr,
+                      Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP,
+                      const QString& tooltip = QString(), const QString& parentRouteKey = QString());
 
-    void addSeparator(NavigationType::NavigationItemPosition position = NavigationType::NavigationItemPosition::TOP);
-    void insertSeparator(int index, NavigationType::NavigationItemPosition position = NavigationType::NavigationItemPosition::TOP);
+    void addSeparator(Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP);
+    void insertSeparator(int index, Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP);
     void removeWidget(const QString& routeKey);
     void setCurrentItem(const QString& routeKey);
 
@@ -76,9 +75,10 @@ public:
     void toggle();
     bool isCollapsed() const;
 
+    NavigationAvatarWidget *avatarWidget() const;
     // 信号
-    signals:
-    void displayModeChanged(NavigationType::NavigationDisplayMode mode);
+signals:
+    void displayModeChanged(Fluent::NavigationDisplayMode mode);
 
 protected:
     void paintEvent(QPaintEvent* e) override;
@@ -89,9 +89,9 @@ private:
     void initLayout();
     void updateAcrylicColor();
     void registerWidget(const QString& routeKey, const QString& parentRouteKey,
-                       NavigationWidget* widget, const std::function<void()>& onClick,
-                       const QString& tooltip);
-    void insertWidgetToLayout(int index, NavigationWidget* widget, NavigationType::NavigationItemPosition position);
+                        NavigationWidget* widget, const std::function<void()>& onClick,
+                        const QString& tooltip);
+    void insertWidgetToLayout(int index, NavigationWidget* widget, Fluent::NavigationItemPosition position);
     void onWidgetClicked();
     void onExpandAniFinished();
     void setWidgetCompacted(bool isCompacted);
@@ -112,7 +112,7 @@ private:
     QWidget* m_scrollWidget;
 
     NavigationToolButton* m_menuButton;
-    NavigationAvatarWidget * m_avatarWidget;
+    NavigationAvatarWidget* m_avatarWidget;
 
     QVBoxLayout* m_vBoxLayout;
     QVBoxLayout* m_topLayout;
@@ -126,7 +126,7 @@ private:
     int m_expandWidth;
 
     bool m_isMinimalEnabled;
-    NavigationType::NavigationDisplayMode m_displayMode;
+    Fluent::NavigationDisplayMode m_displayMode;
 };
 
 // 导航项布局类

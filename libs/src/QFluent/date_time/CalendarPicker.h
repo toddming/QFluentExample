@@ -3,10 +3,10 @@
 
 #include <QPushButton>
 
-#include "Property.h"
+#include "FluentGlobal.h"
 #include "CalendarView.h"
 
-using FIF = FluentIconType::IconType;
+using FIF = Fluent::IconType;
 
 
 class QFLUENT_EXPORT CalendarPicker : public QPushButton

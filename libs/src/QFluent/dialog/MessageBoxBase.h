@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "MaskDialogBase.h"
-#include "Property.h"
+#include "FluentGlobal.h"
 
 class QEvent;
 class QPushButton;
@@ -23,4 +23,5 @@ public:
 
     QPushButton* yesButton();
     QPushButton* cancelbutton();
+
 };

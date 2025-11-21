@@ -1,10 +1,11 @@
 ﻿#ifndef PIVOT_H
 #define PIVOT_H
 
+#include <QMap>
 #include <QWidget>
 #include <QPushButton>
 
-#include "Define.h"
+#include "FluentGlobal.h"
 
 class QHBoxLayout;
 class FluentAnimation;

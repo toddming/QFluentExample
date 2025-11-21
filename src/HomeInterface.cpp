@@ -1,7 +1,6 @@
 ﻿#include "HomeInterface.h"
 #include "Card/LinkCard.h"
 #include "Card/SampleCard.h"
-#include "QFluent/scrollbar/ScrollBar.h"
 #include "FluentIcon.h"
 #include "Theme.h"
 #include "StyleSheet.h"
@@ -18,7 +17,7 @@ void BannerWidget::setupUI()
     setFixedHeight(336);
 
     m_vBoxLayout = new QVBoxLayout(this);
-    m_galleryLabel = new QLabel("Fluent Gallery", this);
+    m_galleryLabel = new QLabel("QFluent Gallery", this);
     m_banner = QPixmap(":/res/header.png");
     m_linkCardView = new LinkCardView(this);
     m_linkCardView->setMinimumHeight(300);
@@ -34,30 +33,30 @@ void BannerWidget::setupUI()
 void BannerWidget::setupLinks()
 {
     m_linkCardView->addCard(
-                FluentIcon(FluentIconType::SEARCH).qicon(),
+                FluentIcon(":/res/example.png").icon(),
                 tr("Getting started"),
-                tr("An overview of app development options and samples."),
+                tr("Get started with QFluent and explore detailed documentation."),
                 ""
                 );
 
     m_linkCardView->addCard(
-                FluentIcon(FluentIconType::GITHUB).qicon(),
-                tr("GitHub repo"),
-                tr("The latest fluent design controls and styles for your applications."),
+                FluentIcon(Fluent::IconType::GITHUB).qicon(),
+                tr("QFluent on GitHub"),
+                tr("Explore the QFluent source code zand repository."),
                 ""
                 );
 
     m_linkCardView->addCard(
-                FluentIcon(FluentIconType::CODE).qicon(),
+                FluentIcon(Fluent::IconType::CODE).qicon(),
                 tr("Code samples"),
                 tr("Find samples that demonstrate specific tasks, features and APIs."),
                 ""
                 );
 
     m_linkCardView->addCard(
-                FluentIcon(FluentIconType::FEEDBACK).qicon(),
-                tr("Send feedback"),
-                tr("Help us improve PyQt-Fluent-Widgets by providing feedback."),
+                FluentIcon(Fluent::IconType::UPDATE).qicon(),
+                tr("Partner Center"),
+                tr("Upload your app to the Store."),
                 ""
                 );
 }
@@ -73,7 +72,7 @@ void BannerWidget::paintEvent(QPaintEvent *event)
     QPainterPath path;
     path.setFillRule(Qt::WindingFill);
     int w = width();
-    int h = height();
+    int h = height() + 2;
     path.addRoundedRect(QRectF(0, 0, w, h), 10, 10);
     path.addRect(QRectF(0, h-50, 50, 50));
     path.addRect(QRectF(w-50, 0, 50, 50));
@@ -85,18 +84,20 @@ void BannerWidget::paintEvent(QPaintEvent *event)
 
     // 绘制背景颜色
     if (!Theme::instance()->isDarkTheme()) {
-        gradient.setColorAt(0, QColor(207, 216, 228, 255));
-        gradient.setColorAt(1, QColor(207, 216, 228, 0));
+        gradient.setColorAt(0, QColor(243, 243, 243, 0));
+        gradient.setColorAt(1, QColor(247, 249, 252, 255));
     } else {
-        gradient.setColorAt(0, QColor(0, 0, 0, 255));
-        gradient.setColorAt(1, QColor(0, 0, 0, 0));
+        gradient.setColorAt(0, QColor(0, 0, 0, 0));
+        gradient.setColorAt(1, QColor(39, 39, 39, 255));
     }
 
-    painter.fillPath(path, QBrush(gradient));
-
     // 绘制横幅图片
-    QPixmap pixmap = m_banner.scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    painter.fillPath(path, QBrush(pixmap));
+    QPixmap scaled = m_banner.scaledToWidth(size().width(), Qt::SmoothTransformation);
+    int y = (scaled.height() - size().height()) / 3;
+    QPixmap pixmap = scaled.copy(0, y, size().width(), size().height());
+
+    painter.drawPixmap(QRect(0, 0, size().width(), size().height()), pixmap);
+    painter.fillPath(path, QBrush(gradient));
 }
 
 HomeInterface::HomeInterface(QWidget *parent)
@@ -117,10 +118,6 @@ void HomeInterface::initWidget()
 
     auto styleSource = std::make_shared<TemplateStyleSheetFile>(":/res/style/{theme}/home_interface.qss");
     StyleSheetManager::instance()->registerWidget(styleSource, this);
-
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ScrollBar* floatVScrollBar = new ScrollBar(this->verticalScrollBar(), this);
-    floatVScrollBar->setIsAnimation(true);
 
     setWidget(m_view);
     setWidgetResizable(true);

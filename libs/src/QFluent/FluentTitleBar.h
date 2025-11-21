@@ -3,7 +3,7 @@
 
 #include <QFrame>
 #include <QAbstractButton>
-#include "Define.h"
+#include "FluentGlobal.h"
 
 class QEvent;
 class QLabel;
@@ -11,7 +11,7 @@ class QWidget;
 class FluentTitleBarPrivate;
 class QFLUENT_EXPORT FluentTitleBar : public QFrame {
     Q_OBJECT
-    Q_Q_CREATE(FluentTitleBar)
+    Q_DECLARE_PRIVATE_D(d_ptr, FluentTitleBar)
 
 public:
     explicit FluentTitleBar(QWidget *parent = nullptr);
@@ -29,9 +29,9 @@ public:
 
     QWidget *hostWidget() const;
     void setHostWidget(QWidget *w);
-    void setWindowButtonFlag(AppBarType::ButtonType buttonFlag, bool isEnable = true);
-    void setWindowButtonFlags(AppBarType::ButtonFlags buttonFlags);
-    AppBarType::ButtonFlags getWindowButtonFlags() const;
+    void setWindowButtonHint(Fluent::WindowButtonHint hint, bool isEnable = true);
+    void setWindowButtonHints(Fluent::WindowButtonHints hints);
+    Fluent::WindowButtonHints windowButtonHints() const;
 
 Q_SIGNALS:
     void backRequested();
@@ -45,6 +45,10 @@ protected:
 
     virtual void titleChanged(const QString &text);
     virtual void iconChanged(const QIcon &icon);
+
+private:
+    QScopedPointer<FluentTitleBarPrivate> d_ptr;
+
 };
 
 
