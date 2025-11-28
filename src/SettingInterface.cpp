@@ -37,18 +37,17 @@ SettingInterface::SettingInterface(QWidget *parent)
     SettingCardGroup *aboutGroup = new SettingCardGroup("关于", m_scrollWidget);
 
 
-    SwitchSettingCard *updateOnStartUpCard = new SwitchSettingCard(FluentIcon(Fluent::IconType::UPDATE).qicon(),
-                                                                   "Check for updates when the application starts",
-                                                                   "The new version will be more stable and have more features",
-                                                                   aboutGroup);
-
-
-
-    ComboBoxSettingCard *languageCard = new ComboBoxSettingCard({"简体中文", "繁體中文", "English", "系统设置"},
-                                                                FluentIcon(Fluent::IconType::LANGUAGE).qicon(),
-                                                                "Language",
-                                                                "Set your preferred language for UI",
+    ComboBoxSettingCard *themeCard = new ComboBoxSettingCard({"深色", "浅色"},
+                                                                FluentIcon(Fluent::IconType::BRUSH).qicon(),
+                                                                "应用主题",
+                                                                "调整你的应用的外观",
                                                                 aboutGroup);
+
+    PrimaryPushSettingCard *colorCard = new PrimaryPushSettingCard("选择颜色",
+                                                                   FluentIcon(Fluent::IconType::PALETTE).qicon(),
+                                                                   "主题色",
+                                                                   "调整你的应用的主题色",
+                                                                   aboutGroup);
 
     OptionsSettingCard *effectCard = new OptionsSettingCard(FluentIcon(Fluent::IconType::ZOOM).qicon(),
                                                             "窗口效果",
@@ -56,37 +55,33 @@ SettingInterface::SettingInterface(QWidget *parent)
                                                             QVector<QString>() << "none" << "dwm-blur" << "acrylic-material" << "mica" << "miac-alt",
                                                             aboutGroup);
 
-    OptionsSettingCard *themeCard = new OptionsSettingCard(FluentIcon(Fluent::IconType::BRUSH).qicon(),
-                                                           "应用主题",
-                                                           "调整你的应用的外观",
-                                                           QVector<QString>() << "深色" << "浅色",
-                                                           aboutGroup);
-
-    PrimaryPushSettingCard *feedbackCard = new PrimaryPushSettingCard("联系作者",
-                                                                      FluentIcon(Fluent::IconType::FEEDBACK).qicon(),
-                                                                      "联系作者",
-                                                                      "QQ:1912229135",
-                                                                      aboutGroup);
-
-    HyperlinkCard *helpCard = new HyperlinkCard("", "打开帮助页面", FluentIcon(Fluent::IconType::HELP).qicon(),
+    HyperlinkCard *helpCard = new HyperlinkCard("https://github.com/toddming/QFluentExample",
+                                                "项目地址", FluentIcon(Fluent::IconType::HELP).qicon(),
                                                 "帮助",
-                                                "https://github.com/toddming/QFluentExample");
+                                                "QQ: 1912229135");
 
-    personalGroup->addSettingCard(updateOnStartUpCard);
-    personalGroup->addSettingCard(languageCard);
+    personalGroup->addSettingCard(colorCard);
     personalGroup->addSettingCard(themeCard);
     personalGroup->addSettingCard(effectCard);
 
-    aboutGroup->addSettingCard(feedbackCard);
     aboutGroup->addSettingCard(helpCard);
-
 
     m_expandLayout->addWidget(personalGroup);
     m_expandLayout->addWidget(aboutGroup);
 
-    connect(themeCard, &OptionsSettingCard::optionChanged, this, [=]
-            (int index, const QString& text) {
-        Q_UNUSED(text);
+    connect(colorCard, &PrimaryPushSettingCard::clicked, this, [this](){
+        if (m_colorDialog == nullptr) {
+            m_colorDialog = new ColorDialog(Theme::instance()->themeColor(), "选择颜色", this->window());
+            connect(m_colorDialog, &ColorDialog::colorChanged, this, [=](const QColor &color) {
+                Theme::instance()->setThemeColor(color);
+                ConfigManager::instance().setValue("Window/color", color.name());
+            });
+        }
+        m_colorDialog->exec();
+    });
+
+    connect(themeCard, &ComboBoxSettingCard::currentIndexChanged, this, [=]
+            (int index) {
         Theme::instance()->setTheme(index == 0 ? Fluent::ThemeMode::DARK : Fluent::ThemeMode::LIGHT);
         ConfigManager::instance().setValue("Window/theme", index);
     });
@@ -98,10 +93,10 @@ SettingInterface::SettingInterface(QWidget *parent)
         ConfigManager::instance().setValue("Window/effect", text);
     });
 
-    const QString theme  = ConfigManager::instance().getValue("Window/theme").toInt() == 0 ? "深色" : "浅色";
+    int themeMode  = ConfigManager::instance().getValue("Window/theme").toInt();
     const QString value  = ConfigManager::instance().isWin11() ? "mica" : "none";
     const QString effect = ConfigManager::instance().getValue("Window/effect", value).toString();
-    themeCard->setValue(theme);
+    themeCard->setValue(themeMode);
     effectCard->setValue(effect);
 
     QStringList modes; modes << "none" << "dwm-blur" << "acrylic-material" << "mica" << "miac-alt";
@@ -110,4 +105,8 @@ SettingInterface::SettingInterface(QWidget *parent)
         auto main = qobject_cast<MainWindow*>(this->window());
         main->setWindowEffect(static_cast<Fluent::WindowEffect>(var));
     }
+
+    connect(Theme::instance(), &Theme::themeModeChanged, this, [=](Fluent::ThemeMode themeType){
+        themeCard->setValue(themeType == Fluent::ThemeMode::DARK ? 0 : 1);
+    });
 }

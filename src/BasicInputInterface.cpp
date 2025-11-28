@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 
 #include "FluentIcon.h"
+#include "QFluent/Slider.h"
 #include "QFluent/CheckBox.h"
 #include "QFluent/ComboBox.h"
 #include "QFluent/ToolButton.h"
@@ -37,7 +38,7 @@ BasicInputInterface::BasicInputInterface(QWidget *parent)
     addExampleCard("三态复选框", checkBox);
 
     auto comboBox = new ComboBox(this);
-    comboBox->addItems({"请选择你的项目😍", "请选择你的项目😘", "请选择你的项目😜"});
+    comboBox->addItems({"请选择你的项目_1", "请选择你的项目_2", "请选择你的项目_3"});
     comboBox->setCurrentIndex(0);
     comboBox->setMinimumWidth(210);
     addExampleCard("下拉框", comboBox);
@@ -100,5 +101,9 @@ BasicInputInterface::BasicInputInterface(QWidget *parent)
     addExampleCard("状态开关按钮", new TransparentTogglePushButton("开始练习", FluentIcon(Fluent::IconType::BASKETBALL), this));
     addExampleCard("状态开关工具按钮", new TransparentToggleToolButton(FluentIcon(Fluent::IconType::BASKETBALL), this));
 
-    addExampleCard("测试按钮", new ToolButton(FluentIcon(Fluent::IconType::HELP), this));
+    auto slider = new Slider(Qt::Horizontal);
+    slider->setRange(0, 100);
+    slider->setValue(30);
+    slider->setMinimumWidth(200);
+    addExampleCard("水平滑动条", slider);
 }
