@@ -9,6 +9,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/include)
 
 file(GLOB_RECURSE SOURCES

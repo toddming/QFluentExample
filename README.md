@@ -21,10 +21,10 @@
 - **操作系统**：Windows 10 或更高版本
 - **Qt 版本**：≥ 5.15
 - **主分支构建配置**：
-  - Qt 6.8.3
+  - Qt 6.8.3 / Qt 5.15.2
   - MSVC 2022 64-bit
 
-> 💡 提示：虽然主分支基于 Qt 6.8.3 + MSVC 构建，但 QFluentKit 动态库本身兼容 Qt 5.15 及 Qt 6 的多种编译环境（MinGW / MSVC）。
+> 💡 主分支可在 Qt 6.8.3 + MSVC 或 Qt 5.15.2 + MSVC 环境下直接构建并运行。QFluentKit 动态库本身兼容 Qt 5.15 及 Qt 6 的多个版本，并支持 MinGW 与 MSVC 编译器；但本仓库的示例程序仅预置了上述两种 MSVC 环境（Qt 6.8.3 / Qt 5.15.2）构建的动态库。
 
 ## 📦 依赖与参考
 
@@ -33,7 +33,7 @@
 
 ## 📺 在线演示
 
-想先看看效果？欢迎观看 [Bilibili 演示视频](bilibili.com/video/BV1QKCuBHEyX/)！
+想先看看效果？欢迎观看 [Bilibili 演示视频](https://www.bilibili.com/video/BV1p211BmEpa/)！
 
 ## 📄 许可证
 
