@@ -1,8 +1,6 @@
 ﻿#include <QApplication>
 #include "MainWindow.h"
 
-#include <QDebug>
-
 int main(int argc, char *argv[])
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -13,8 +11,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
-
-
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
