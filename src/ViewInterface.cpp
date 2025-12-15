@@ -1,5 +1,6 @@
 ﻿#include "ViewInterface.h"
 
+#include "QFluent/ListView.h"
 #include "QFluent/TableView.h"
 
 ViewInterface::ViewInterface(QWidget *parent)
@@ -11,7 +12,7 @@ ViewInterface::ViewInterface(QWidget *parent)
     tableWidget->setFixedSize(725, 440);
     tableWidget->verticalHeader()->hide();
     tableWidget->setBorderVisible(true);
-    tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+    tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     QVector<QStringList> demoData = {
@@ -45,6 +46,74 @@ ViewInterface::ViewInterface(QWidget *parent)
     }
 
     addExampleCard("简单的表格组件", tableWidget);
+
+    auto listWidget = new ListWidget(this);
+    QStringList stands = {
+        "安卓", "Android Auto", "Android TV", "内置 Google 的汽车",
+        "谷歌浏览器", "Chromebook and ChromeOS", "联系人", "数字健康",
+        "文件", "财经", "Find Hub", "Fitbit",
+        "谷歌航班", "Gboard", "Gemini", "谷歌邮箱",
+        "谷歌艺术与文化", "谷歌助手", "谷歌身份验证器", "谷歌日历",
+        "Google Cast", "谷歌聊天", "谷歌课堂", "谷歌文档",
+        "谷歌云端硬盘", "谷歌地球", "谷歌家庭联系", "Google Fi Wireless",
+        "谷歌健康", "Google Fonts", "谷歌表单", "Google Home",
+        "谷歌备忘录", "谷歌地图", "谷歌会议", "谷歌信息",
+        "Google Nest", "谷歌新闻", "Google One", "谷歌支付",
+        "谷歌相册", "Google Play", "Google Play 图书", "Google Play 游戏",
+        "Google Play Pass", "Google Play 保护机制", "谷歌表格", "谷歌协作平台",
+        "谷歌幻灯片", "谷歌任务", "谷歌翻译", "谷歌趋势",
+        "Google TV", "Google TV Streamer", "谷歌语音", "谷歌钱包",
+        "Google Workspace", "谷歌智能镜头", "NotebookLM", "Pixel",
+        "Pixel Buds", "Pixel 平板电脑", "Pixel Watch", "谷歌学术",
+        "谷歌搜索", "谷歌购物", "街景", "谷歌旅行",
+        "Waze", "Wear OS by Google", "YouTube", "YouTube Kids",
+        "YouTube Music", "YouTube TV", "Android Enterprise", "Blogger",
+        "商家资料", "Chrome Enterprise", "ChromeOS", "Demand Gen",
+        "谷歌广告", "Google AdMob", "Google AdSense", "Google Ad Manager",
+        "谷歌分析", "谷歌助手", "谷歌云", "谷歌地图平台",
+        "谷歌营销平台", "谷歌搜索中心", "Google Workspace", "本地服务广告",
+        "Manufacturer Center", "Merchant Center", "效果最大化", "Pixel for Business",
+        "搜索广告", "购物广告", "Tag Manager", "YouTube 广告",
+        "AI for Developers", "安卓", "云计算", "Firebase",
+        "Flutter", "Google AdMob", "谷歌广告", "谷歌分析",
+        "谷歌云", "Google for Developers", "Google Identity Platform", "谷歌地图平台",
+        "谷歌支付", "Google Play", "谷歌钱包", "Interactive Media Ads",
+        "谷歌搜索", "TensorFlow", "Web"
+    };
+    foreach (const QString &stand, stands) {
+        auto item = new QListWidgetItem(stand);
+        // item->setIcon(QIcon(":/res/Slices.png"));
+        listWidget->addItem(item);
+    }
+    auto listFrame = new Frame(this);
+    listFrame->addWidget(listWidget);
+    listFrame->setFixedSize(300, 400);
+
+    addExampleCard("简单的列表组件", listFrame);
+}
+
+Frame::Frame(QWidget *parent)
+    : QFrame(parent)
+    , hBoxLayout(new QHBoxLayout(this))
+{
+    setupUI();
+    applyStyleSheet();
 }
 
 
+void Frame::setupUI()
+{
+    hBoxLayout->setContentsMargins(0, 8, 0, 0);
+    setObjectName("frame");
+}
+
+void Frame::addWidget(QWidget *widget)
+{
+    hBoxLayout->addWidget(widget);
+}
+
+void Frame::applyStyleSheet()
+{
+    auto styleSource = std::make_shared<TemplateStyleSheetFile>(":/res/style/{theme}/view_interface.qss");
+    StyleSheetManager::instance()->registerWidget(styleSource, this);
+}
