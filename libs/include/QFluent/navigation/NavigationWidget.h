@@ -1,7 +1,6 @@
-﻿#ifndef NAVIGATION_WIDGET_H
-#define NAVIGATION_WIDGET_H
-
+﻿#pragma once
 #include <QWidget>
+#include <memory>
 
 #include "FluentIcon.h"
 #include "FluentGlobal.h"
@@ -11,10 +10,15 @@ class Flyout;
 class AvatarWidget;
 class QVBoxLayout;
 class QPropertyAnimation;
-class NavigationWidget : public QWidget {
+class ScaleSlideAnimation;
+class QParallelAnimationGroup;
+
+class QFLUENT_EXPORT NavigationWidget : public QWidget {
     Q_OBJECT
 public:
     explicit NavigationWidget(bool isSelectable, QWidget* parent = nullptr);
+    ~NavigationWidget() override = default;
+
     virtual void insertChild(int index, NavigationWidget* child);
 
     virtual void setCompacted(bool isCompacted);
@@ -22,18 +26,19 @@ public:
     void setLightTextColor(const QColor& color);
     void setDarkTextColor(const QColor& color);
     void setTextColor(const QColor& light, const QColor& dark);
-    QColor textColor();
+    QColor textColor() const;
 
     void click();
 
     void setExpandWidth(int width);
+    int expandWidth() const;
 
 signals:
     void clicked(bool triggeredByUser);
     void selectedChanged(bool selected);
 
 protected:
-    #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     void enterEvent(QEnterEvent* e) override;
 #else
     void enterEvent(QEvent* e) override;
@@ -42,24 +47,24 @@ protected:
     void mousePressEvent(QMouseEvent* e) override;
     void mouseReleaseEvent(QMouseEvent* e) override;
 
-    NavigationWidget* treeParent();
+    NavigationWidget* treeParent() const;
     void setTreeParent(NavigationWidget* p);
 
-    int expandWidth();
-
 private:
-    NavigationWidget* m_treeParent;
-    QColor lightTextColor;
-    QColor darkTextColor;
-    int m_expandWidth;
+    NavigationWidget* m_treeParent{nullptr};
+    QColor m_lightTextColor;
+    QColor m_darkTextColor;
+    int m_expandWidth{160};
 };
 
 
 // NavigationPushButton
-class NavigationPushButton : public NavigationWidget {
+class QFLUENT_EXPORT NavigationPushButton : public NavigationWidget {
     Q_OBJECT
 public:
-    NavigationPushButton(const QString &text, const FluentIconBase &icon, bool isSelectable, QWidget* parent = nullptr);
+    NavigationPushButton(const QString &text, const FluentIconBase &icon,
+                        bool isSelectable, QWidget* parent = nullptr);
+    ~NavigationPushButton() override = default;
 
     QString text() const;
     void setText(const QString& text);
@@ -71,27 +76,28 @@ public:
 
 protected:
     void paintEvent(QPaintEvent* e) override;
-    virtual QMargins _margins();
-    virtual bool _canDrawIndicator();
+    virtual QMargins margins() const;
+    virtual bool canDrawIndicator() const;
 
 private:
     std::unique_ptr<FluentIconBase> m_fluentIcon;
     QString m_text;
-    QColor lightIndicatorColor;
-    QColor darkIndicatorColor;
+    QColor m_lightIndicatorColor;
+    QColor m_darkIndicatorColor;
 };
 
 
 // NavigationToolButton
-class NavigationToolButton : public NavigationPushButton {
+class QFLUENT_EXPORT NavigationToolButton : public NavigationPushButton {
     Q_OBJECT
 public:
     NavigationToolButton(const FluentIconBase &icon, QWidget* parent = nullptr);
     void setCompacted(bool isCompacted) override;
 };
 
+
 // NavigationSeparator
-class NavigationSeparator : public NavigationWidget {
+class QFLUENT_EXPORT NavigationSeparator : public NavigationWidget {
     Q_OBJECT
 public:
     explicit NavigationSeparator(QWidget* parent = nullptr);
@@ -101,21 +107,24 @@ protected:
     void paintEvent(QPaintEvent* e) override;
 };
 
-class NavigationTreeWidget; // 前向声明
+
+class NavigationTreeWidget;
 
 // NavigationTreeItem
-class NavigationTreeItem : public NavigationPushButton {
+class QFLUENT_EXPORT NavigationTreeItem : public NavigationPushButton {
     Q_OBJECT
-    Q_PROPERTY(float arrowAngle READ getArrowAngle WRITE setArrowAngle)
+    Q_PROPERTY(float arrowAngle READ arrowAngle WRITE setArrowAngle)
 public:
-    NavigationTreeItem(const QString &text, const FluentIconBase &icon, bool isSelectable, NavigationTreeWidget* parent = nullptr);
+    NavigationTreeItem(const QString &text, const FluentIconBase &icon,
+                      bool isSelectable, NavigationTreeWidget* parent = nullptr);
+    ~NavigationTreeItem() override = default;
 
     void setExpanded(bool isExpanded);
-    float getArrowAngle() const;
+    float arrowAngle() const;
     void setArrowAngle(float angle);
-    bool _canDrawIndicator() override;
-    QMargins _margins() override;
 
+    bool canDrawIndicator() const override;
+    QMargins margins() const override;
 
 signals:
     void itemClicked(bool triggeredByUser, bool clickArrow);
@@ -123,39 +132,46 @@ signals:
 protected:
     void mouseReleaseEvent(QMouseEvent* e) override;
     void paintEvent(QPaintEvent* e) override;
+
 private:
-    float _arrowAngle;
-    QPropertyAnimation* rotateAni;
+    float m_arrowAngle{0.0f};
+    QPropertyAnimation* m_rotateAnimation{nullptr};
 };
 
+
 // NavigationTreeWidgetBase
-class NavigationTreeWidgetBase : public NavigationWidget {
+class QFLUENT_EXPORT NavigationTreeWidgetBase : public NavigationWidget {
     Q_OBJECT
 public:
     explicit NavigationTreeWidgetBase(bool isSelectable, QWidget* parent = nullptr)
         : NavigationWidget(isSelectable, parent) {}
+    ~NavigationTreeWidgetBase() override = default;
 
     virtual void addChild(NavigationWidget* child) = 0;
     virtual void removeChild(NavigationWidget* child) = 0;
-    virtual bool isRoot() = 0;
-    virtual bool isLeaf() = 0;
+    virtual bool isRoot() const = 0;
+    virtual bool isLeaf() const = 0;
     virtual void setExpanded(bool isExpanded) = 0;
-    virtual std::vector<NavigationWidget*> childItems() = 0;
+    virtual std::vector<NavigationWidget*> childItems() const = 0;
 };
 
+
 // NavigationTreeWidget
-class NavigationTreeWidget : public NavigationTreeWidgetBase {
+class QFLUENT_EXPORT NavigationTreeWidget : public NavigationTreeWidgetBase {
     Q_OBJECT
 public:
-    NavigationTreeWidget(const QString &text, const FluentIconBase &icon, bool isSelectable, QWidget* parent = nullptr);
+    NavigationTreeWidget(const QString &text, const FluentIconBase &icon,
+                        bool isSelectable, QWidget* parent = nullptr);
+    ~NavigationTreeWidget() override = default;
 
     void addChild(NavigationWidget* child) override;
     void insertChild(int index, NavigationWidget* child) override;
     void removeChild(NavigationWidget* child) override;
-    bool isRoot() override;
-    bool isLeaf() override;
+
+    bool isRoot() const override;
+    bool isLeaf() const override;
     void setExpanded(bool isExpanded) override;
-    void setExpanded(bool isExpanded, bool ani);
+    void setExpanded(bool isExpanded, bool animated);
 
     QString text() const;
     void setText(const QString& text);
@@ -163,16 +179,16 @@ public:
     FluentIconBase* fluentIcon() const;
     void setIndicatorColor(const QColor& light, const QColor& dark);
     void setFont(const QFont& font);
-    NavigationTreeWidget* clone();
-    int suitableWidth();
+
+    NavigationTreeWidget* clone() const;
+    int suitableWidth() const;
     void setSelected(bool isSelected);
     void setCompacted(bool isCompacted) override;
-    std::vector<NavigationWidget*> childItems() override;
-
-    std::vector<NavigationTreeWidget*> treeChildren();
-    NavigationTreeItem* itemWidget();
-
     void setExpandWidth(int width);
+
+    std::vector<NavigationWidget*> childItems() const override;
+    std::vector<NavigationTreeWidget*> treeChildren() const;
+    NavigationTreeItem* itemWidget() const;
 
 signals:
     void expanded();
@@ -181,64 +197,177 @@ protected:
     void mouseReleaseEvent(QMouseEvent* e) override;
 
 private slots:
-    void _onClicked(bool triggerByUser, bool clickArrow);
+    void onItemClicked(bool triggerByUser, bool clickArrow);
 
 private:
-    void __initWidget();
+    void initWidget();
 
-    bool isExpanded;
+    bool m_isExpanded{false};
     std::unique_ptr<FluentIconBase> m_fluentIcon;
 
-    QVBoxLayout* vBoxLayout;
-    QPropertyAnimation* expandAni;
+    QVBoxLayout* m_vBoxLayout{nullptr};
+    QPropertyAnimation* m_expandAnimation{nullptr};
 
     std::vector<NavigationTreeWidget*> m_treeChildren;
-    NavigationTreeItem* m_itemWidget;
-
+    NavigationTreeItem* m_itemWidget{nullptr};
 };
 
 
 // NavigationFlyoutMenu
-class NavigationFlyoutMenu : public ScrollArea {
+class QFLUENT_EXPORT NavigationFlyoutMenu : public ScrollArea {
     Q_OBJECT
 public:
     NavigationFlyoutMenu(NavigationTreeWidget* tree, QWidget* parent = nullptr);
+    ~NavigationFlyoutMenu() override = default;
 
 signals:
     void expanded();
 
 private:
-    void _initNode(NavigationTreeWidget* root);
-    void _adjustViewSize(bool emitSignal = true);
-    int _suitableWidth();
-    std::vector<NavigationTreeWidget*> visibleTreeNodes();
+    void initNode(NavigationTreeWidget* root);
+    void adjustViewSize(bool emitSignal = true);
+    int suitableWidth() const;
+    std::vector<NavigationTreeWidget*> visibleTreeNodes() const;
 
-    QWidget* view;
-    NavigationTreeWidget* treeWidget;
-    std::vector<NavigationTreeWidget*> treeChildren;
-    QVBoxLayout* vBoxLayout;
+    QWidget* m_view{nullptr};
+    NavigationTreeWidget* m_treeWidget{nullptr};
+    std::vector<NavigationTreeWidget*> m_treeChildren;
+    QVBoxLayout* m_vBoxLayout{nullptr};
 };
 
 
 // NavigationAvatarWidget
-class QFLUENT_EXPORT NavigationAvatarWidget : public NavigationWidget
-{
+class QFLUENT_EXPORT NavigationAvatarWidget : public NavigationWidget {
     Q_OBJECT
-
 public:
     explicit NavigationAvatarWidget(const QString &name,
                                     const QVariant &avatar = {},
                                     QWidget *parent = nullptr);
+    ~NavigationAvatarWidget() override = default;
 
     void setName(const QString &name);
     void setAvatar(const QVariant &avatar);
+    QString name() const;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
     QString m_name;
-    AvatarWidget *m_avatar;
+    AvatarWidget *m_avatar{nullptr};
 };
 
-#endif // NAVIGATION_WIDGET_H
+
+// NavigationUserCard
+class QFLUENT_EXPORT NavigationUserCard : public NavigationAvatarWidget {
+    Q_OBJECT
+    Q_PROPERTY(float textOpacity READ textOpacity WRITE setTextOpacity)
+    Q_PROPERTY(QColor subtitleColor READ subtitleColor WRITE setSubtitleColor)
+
+public:
+    explicit NavigationUserCard(QWidget *parent = nullptr);
+    ~NavigationUserCard() override = default;
+
+    void setAvatarIcon(const QIcon &icon);
+    void setAvatarBackgroundColor(const QColor &light, const QColor &dark);
+
+    QString title() const;
+    void setTitle(const QString &title);
+
+    QString subtitle() const;
+    void setSubtitle(const QString &subtitle);
+
+    void setTitleFontSize(int size);
+    void setSubtitleFontSize(int size);
+
+    void setAnimationDuration(int duration);
+
+    void setCompacted(bool isCompacted) override;
+
+    float textOpacity() const;
+    void setTextOpacity(float opacity);
+
+    QColor subtitleColor() const;
+    void setSubtitleColor(const QColor &color);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+private:
+    void drawText(QPainter &painter);
+    void updateAvatarPosition();
+
+    QString m_title;
+    QString m_subtitle;
+    int m_titleSize{14};
+    int m_subtitleSize{12};
+    QColor m_subtitleColor;
+
+    float m_textOpacity{0.0f};
+    int m_animationDuration{250};
+    QParallelAnimationGroup *m_animationGroup{nullptr};
+    QPropertyAnimation *m_radiusAnimation{nullptr};
+    QPropertyAnimation *m_opacityAnimation{nullptr};
+};
+
+
+// NavigationIndicator
+class QFLUENT_EXPORT NavigationIndicator : public QWidget {
+    Q_OBJECT
+public:
+    explicit NavigationIndicator(QWidget *parent = nullptr);
+    ~NavigationIndicator() override = default;
+
+    void startAnimation(const QRectF &startRect, const QRectF &endRect,
+                       bool useCrossFade = false);
+    void stopAnimation();
+
+    void setIndicatorColor(const QColor &light, const QColor &dark);
+
+signals:
+    void animationFinished();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+private:
+    QColor m_lightColor;
+    QColor m_darkColor;
+    ScaleSlideAnimation *m_scaleSlideAnimation{nullptr};
+};
+
+
+// NavigationItemHeader
+class QFLUENT_EXPORT NavigationItemHeader : public NavigationWidget {
+    Q_OBJECT
+    Q_PROPERTY(int maximumHeight READ maximumHeight WRITE setMaximumHeight)
+
+public:
+    explicit NavigationItemHeader(const QString &text, QWidget *parent = nullptr);
+    ~NavigationItemHeader() override = default;
+
+    QString text() const;
+    void setText(const QString &text);
+
+    void setCompacted(bool isCompacted) override;
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    void enterEvent(QEnterEvent *e) override;
+#else
+    void enterEvent(QEvent *e) override;
+#endif
+    void leaveEvent(QEvent *e) override;
+
+private slots:
+    void onCollapseFinished();
+    void onHeightChanged(const QVariant &value);
+
+private:
+    QString m_text;
+    int m_targetHeight{30};
+    QPropertyAnimation *m_heightAnimation{nullptr};
+};

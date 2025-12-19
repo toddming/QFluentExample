@@ -4,9 +4,9 @@
 #include "Theme.h"
 #include "StyleSheet.h"
 #include "FluentIcon.h"
-#include "QFluent/settings/SettingCard.h"
-#include "QFluent/settings/SettingCardGroup.h"
-#include "QFluent/settings/OptionsSettingCard.h"
+#include "QFluent/Settings/SettingCard.h"
+#include "QFluent/Settings/SettingCardGroup.h"
+#include "QFluent/Settings/OptionsSettingCard.h"
 
 #include "MainWindow.h"
 #include "ConfigManager.h"
@@ -56,9 +56,9 @@ SettingInterface::SettingInterface(QWidget *parent)
                                                             aboutGroup);
 
     HyperlinkCard *helpCard = new HyperlinkCard("https://github.com/toddming/QFluentExample",
-                                                "项目地址", FluentIcon(Fluent::IconType::HELP).qicon(),
-                                                "帮助",
-                                                "QQ: 1912229135");
+                                                "项目地址", FluentIcon(Fluent::IconType::GITHUB).qicon(),
+                                                "GitHub",
+                                                "https://github.com/toddming/QFluentExample");
 
     personalGroup->addSettingCard(colorCard);
     personalGroup->addSettingCard(themeCard);

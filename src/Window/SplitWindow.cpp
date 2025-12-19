@@ -5,7 +5,10 @@
 #include "StyleSheet.h"
 #include "QFluent/Label.h"
 #include "QFluent/StackedWidget.h"
-#include "QFluent/navigation/NavigationBar.h"
+#include "QFluent/Navigation/NavigationBar.h"
+
+using FIT = Fluent::IconType;
+using NIP = Fluent::NavigationItemPosition;
 
 SplitWidget::SplitWidget()
 {
@@ -28,15 +31,22 @@ void SplitWidget::initUI()
     setWindowTitle("QFluentKit");
     setWindowIcon(QPixmap(":/res/example.png"));
 
-    navigationInterface()->avatarWidget()->hide();
     navigationInterface()->setExpandWidth(200);
 
-    addSubInterface("1", FluentIcon(Fluent::IconType::HOME), "主页", createWidget("主页", this), true, Fluent::NavigationItemPosition::TOP);
+    addSubInterface("1", FluentIcon(FIT::HOME), "主页", createWidget("主页", this), true, NIP::TOP);
     navigationInterface()->addSeparator();
-    addSubInterface("3", FluentIcon(Fluent::IconType::CHECKBOX), "输入", createWidget("输入", this), true, Fluent::NavigationItemPosition::SCROLL);
-    addSubInterface("4", FluentIcon(Fluent::IconType::DATE_TIME), "日期", createWidget("日期", this), true, Fluent::NavigationItemPosition::SCROLL);
-    navigationInterface()->addSeparator(Fluent::NavigationItemPosition::BOTTOM);
-    addSubInterface("5", FluentIcon(Fluent::IconType::SETTING), "设置", createWidget("设置", this), true, Fluent::NavigationItemPosition::BOTTOM);
+    navigationInterface()->addItemHeader("基础", NIP::SCROLL);
+    addSubInterface("3", FluentIcon(FIT::CHAT), "对话", createWidget("对话", this), true, NIP::SCROLL);
+    addSubInterface("4", FluentIcon(FIT::GAME), "游戏", createWidget("游戏", this), true, NIP::SCROLL);
+
+    navigationInterface()->addItemHeader("进阶", NIP::SCROLL);
+    addSubInterface("5", FluentIcon(FIT::LEAF), "能效", createWidget("能效", this), true, NIP::SCROLL);
+    addSubInterface("6", FluentIcon(FIT::FINGERPRINT), "加密", createWidget("加密", this), true, NIP::SCROLL);
+    navigationInterface()->addSeparator(NIP::BOTTOM);
+    auto avatarWidget = new NavigationAvatarWidget("Administrator", QImage(":/res/avatar.png"), this);
+    navigationInterface()->addWidget("7", avatarWidget, nullptr, NIP::BOTTOM);
+
+    addSubInterface("8", FluentIcon(FIT::SETTING), "设置", createWidget("设置", this), true, NIP::BOTTOM);
 
     navigationInterface()->setCurrentItem("1");
 
