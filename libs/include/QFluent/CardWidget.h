@@ -1,8 +1,6 @@
-﻿#ifndef CARDWIDGET_H
-#define CARDWIDGET_H
+﻿#pragma once
 
 #include "Animation.h"
-#include <QFrame>
 #include <QPainter>
 #include <QPainterPath>
 #include <QMouseEvent>
@@ -32,12 +30,11 @@ protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    QColor _normalBackgroundColor() const;
-    QColor _hoverBackgroundColor() const;
-    QColor _pressedBackgroundColor() const;
+    QColor normalBackgroundColor() const override;
+    QColor hoverBackgroundColor() const override;
+    QColor pressedBackgroundColor() const override;
 
     bool _isClickEnabled;
     int _borderRadius;
 };
 
-#endif // CARDWIDGET_H

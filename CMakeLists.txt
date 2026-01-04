@@ -76,8 +76,15 @@ endif()
 # 获取编译器信息
 set(COMPILER_INFO ${CMAKE_CXX_COMPILER_ID})
 
+# 简单区分 32/64 位
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(ARCH_BIT "x64")
+else()
+    set(ARCH_BIT "x86")
+endif()
+
 # 拼接最终字符串
-set(QT_AND_COMPILER_STRING "${QT_VERSION_STRING}_${COMPILER_INFO}")
+set(QT_AND_COMPILER_STRING "${QT_VERSION_STRING}_${COMPILER_INFO}_${ARCH_BIT}")
 
 # 输出
 message(STATUS "Detected build environment: ${QT_AND_COMPILER_STRING}")

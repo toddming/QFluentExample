@@ -1,25 +1,29 @@
-﻿#ifndef TEACHING_TIP_H
-#define TEACHING_TIP_H
-
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QPainter>
-#include <QPropertyAnimation>
-#include <QTimer>
-#include <QEvent>
-#include <QIcon>
-#include <QPixmap>
-#include <QImage>
-#include <QGraphicsDropShadowEffect>
-#include <QPainterPath>
-#include <QPolygonF>
+﻿#pragma once
 
 #include "Flyout.h"
 #include "FluentGlobal.h"
 
-// 前向声明
+#include <QWidget>
+
+// 前向声明 - Qt 类
+class QHBoxLayout;
+class QVBoxLayout;
+class QPaintEvent;
+class QShowEvent;
+class QCloseEvent;
+class QPropertyAnimation;
+class QGraphicsDropShadowEffect;
+class QIcon;
+class QPixmap;
+class QPainter;
+
+// 前向声明 - 自定义类
+class FlyoutViewBase;
 class TeachingTipManager;
+
+// ============================================================================
+// 枚举定义
+// ============================================================================
 
 // 尾巴位置枚举
 enum class TeachingTipTailPosition {
@@ -46,7 +50,9 @@ enum class ImagePosition {
     RIGHT
 };
 
-// TeachingTip视图
+// ============================================================================
+// TeachingTip 视图
+// ============================================================================
 class QFLUENT_EXPORT TeachingTipView : public FlyoutView {
     Q_OBJECT
 public:
@@ -58,9 +64,10 @@ public:
                             TeachingTipTailPosition tailPosition = TeachingTipTailPosition::BOTTOM,
                             QWidget* parent = nullptr);
 
-    TeachingTipManager* manager() const { return m_manager; }
+    ~TeachingTipView() override = default;
 
-    QHBoxLayout* hBoxLayout() const {return m_hBoxLayout;}
+    TeachingTipManager* manager() const { return m_manager; }
+    QHBoxLayout* hBoxLayout() const { return m_hBoxLayout; }
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -72,13 +79,17 @@ private:
     QHBoxLayout* m_hBoxLayout;
 };
 
-// TeachingTip气泡
+// ============================================================================
+// TeachingTip 气泡
+// ============================================================================
 class TeachTipBubble : public QWidget {
     Q_OBJECT
 public:
     explicit TeachTipBubble(FlyoutViewBase* view,
                            TeachingTipTailPosition tailPosition = TeachingTipTailPosition::BOTTOM,
                            QWidget* parent = nullptr);
+
+    ~TeachTipBubble() override = default;
 
     void setView(QWidget* view);
     FlyoutViewBase* view() const { return m_view; }
@@ -94,7 +105,9 @@ private:
     FlyoutViewBase* m_view;
 };
 
-// TeachingTip主类
+// ============================================================================
+// TeachingTip 主类
+// ============================================================================
 class QFLUENT_EXPORT TeachingTip : public QWidget {
     Q_OBJECT
 public:
@@ -105,9 +118,11 @@ public:
                         QWidget* parent = nullptr,
                         bool isDeleteOnClose = true);
 
+    ~TeachingTip() override = default;
+
     void setShadowEffect(int blurRadius = 35, const QPoint& offset = QPoint(0, 8));
-    
-    FlyoutViewBase* view() const { return m_bubble->view(); }
+
+    FlyoutViewBase* view() const { return m_bubble ? m_bubble->view() : nullptr; }
     void setView(FlyoutViewBase* view);
     void addWidget(QWidget* widget, int stretch = 0, Qt::Alignment align = Qt::AlignLeft);
 
@@ -129,6 +144,11 @@ public:
                               QWidget* parent = nullptr,
                               bool isDeleteOnClose = true);
 
+    // 公共成员（保持与原代码兼容）
+    QWidget* target;
+    int duration;
+    TeachingTipManager* m_manager;
+
 protected:
     void showEvent(QShowEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
@@ -136,11 +156,6 @@ protected:
 
 private:
     void fadeOut();
-
-public:
-    QWidget* target;
-    int duration;
-    TeachingTipManager* m_manager;
 
 private:
     QHBoxLayout* m_hBoxLayout;
@@ -150,7 +165,9 @@ private:
     bool m_isDeleteOnClose;
 };
 
+// ============================================================================
 // PopupTeachingTip
+// ============================================================================
 class PopupTeachingTip : public TeachingTip {
     Q_OBJECT
 public:
@@ -160,14 +177,18 @@ public:
                              TeachingTipTailPosition tailPosition = TeachingTipTailPosition::BOTTOM,
                              QWidget* parent = nullptr,
                              bool isDeleteOnClose = true);
+
+    ~PopupTeachingTip() override = default;
 };
 
-// TeachingTip管理器基类
+// ============================================================================
+// TeachingTip 管理器基类
+// ============================================================================
 class TeachingTipManager : public QObject {
     Q_OBJECT
 public:
     explicit TeachingTipManager(QObject* parent = nullptr);
-    virtual ~TeachingTipManager() = default;
+    ~TeachingTipManager() override = default;
 
     virtual void doLayout(TeachTipBubble* tip);
     virtual ImagePosition imagePosition() const;
@@ -180,7 +201,9 @@ protected:
     virtual QPoint pos(TeachingTip* tip);
 };
 
+// ============================================================================
 // 各种位置的管理器实现
+// ============================================================================
 class TopTailTeachingTipManager : public TeachingTipManager {
     Q_OBJECT
 public:
@@ -311,5 +334,3 @@ public:
 protected:
     QPoint pos(TeachingTip* tip) override;
 };
-
-#endif // TEACHING_TIP_H

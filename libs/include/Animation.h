@@ -110,20 +110,19 @@ public:
     explicit BackgroundAnimationWidget(QWidget *parent = nullptr);
     ~BackgroundAnimationWidget() override;
 
-    QColor getBackgroundColor() const;
+    QColor backgroundColor() const;
     void setBackgroundColor(const QColor &color);
-    QColor backgroundColor() const { return getBackgroundColor(); }
 
-    virtual QColor _normalBackgroundColor() const;
-    virtual QColor _hoverBackgroundColor() const;
-    virtual QColor _pressedBackgroundColor() const;
-    virtual QColor _focusInBackgroundColor() const;
-    virtual QColor _disabledBackgroundColor() const;
+    virtual QColor normalBackgroundColor() const;
+    virtual QColor hoverBackgroundColor() const;
+    virtual QColor pressedBackgroundColor() const;
+    virtual QColor focusInBackgroundColor() const;
+    virtual QColor disabledBackgroundColor() const;
 
 protected:
     BackgroundAnimationWidget(BackgroundAnimationWidgetPrivate &dd, QWidget *parent);
 
-    void _updateBackgroundColor();
+    void updateBackgroundColor();
 
     bool eventFilter(QObject *obj, QEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;

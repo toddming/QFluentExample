@@ -1,15 +1,11 @@
-﻿#ifndef FLUENTWINDOW_H
-#define FLUENTWINDOW_H
+﻿#pragma once
 
 #include <QMainWindow>
 
 #include "FluentGlobal.h"
-#include "FluentIcon.h"
 
-class StackedWidget;
-class NavigationPanel;
+class FluentTitleBar;
 class FluentWindowPrivate;
-class NavigationAvatarWidget;
 class QFLUENT_EXPORT FluentWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,24 +22,14 @@ public:
     void setWindowEffect(Fluent::WindowEffect effect);
     Fluent::WindowEffect windowEffect() const;
 
-    void setCustomWindowIcon(const QPixmap &pixmap, const QSize &size);
+    FluentTitleBar *titleBar() const;
 
-    void addSubInterface(const QString& routeKey, const FluentIconBase& icon, const QString& text,
-                         QWidget* widget, bool selectable = true,
-                         Fluent::NavigationItemPosition position = Fluent::NavigationItemPosition::TOP,
-                         const QString& tooltip = QString(), const QString& parentRouteKey = QString());
-
-    NavigationPanel *navigationInterface() const;
-    StackedWidget *stackedWidget() const;
+    void setHitTestVisible(QWidget *w, bool visible);
 
 Q_SIGNALS:
     void backRequested();
 
 protected:
     bool event(QEvent *event) override;
-
-private:
     QScopedPointer<FluentWindowPrivate> d_ptr;
-
 };
-#endif // FLUENTWINDOW_H

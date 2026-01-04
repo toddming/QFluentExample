@@ -1,5 +1,4 @@
-﻿#ifndef FLUENTTITLEBAR_H
-#define FLUENTTITLEBAR_H
+﻿#pragma once
 
 #include <QFrame>
 #include <QAbstractButton>
@@ -25,7 +24,7 @@ public:
     QAbstractButton *maxButton() const;
     QAbstractButton *closeButton() const;
     QAbstractButton *backButton() const;
-    QLabel *iconLabel() const;
+    QWidget *centerWidget() const;
 
     QWidget *hostWidget() const;
     void setHostWidget(QWidget *w);
@@ -51,6 +50,3 @@ private:
 
 };
 
-
-
-#endif // FLUENTTITLEBAR_H
