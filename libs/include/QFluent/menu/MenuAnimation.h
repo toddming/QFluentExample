@@ -8,6 +8,7 @@
 
 class RoundMenu;
 class QPropertyAnimation;
+class QParallelAnimationGroup;
 class QPoint;
 template<class Key, class T> class QMap;
 
@@ -21,6 +22,8 @@ public:
 
     virtual void exec(const QPoint& pos) = 0;
 
+    virtual QPoint endPosition(const QPoint& pos) const;
+
     void updateMenuViewport();
 
     static void registerManager(Fluent::MenuAnimation type,
@@ -28,7 +31,6 @@ public:
     static MenuAnimationManager* make(RoundMenu* menu, Fluent::MenuAnimation aniType);
 
 protected:
-    virtual QPoint endPosition(const QPoint& pos) const;
     virtual std::pair<int, int> menuSize() const;
     virtual void onValueChanged();
 
@@ -69,4 +71,31 @@ public:
 
 protected:
     QPoint endPosition(const QPoint& pos) const override;
+};
+
+class FadeInDropDownMenuAnimationManager : public MenuAnimationManager
+{
+    Q_OBJECT
+public:
+    explicit FadeInDropDownMenuAnimationManager(RoundMenu* menu, QObject* parent = nullptr);
+    void exec(const QPoint& pos) override;
+
+private:
+    QPropertyAnimation* m_opacityAni;
+    QParallelAnimationGroup* m_aniGroup;
+};
+
+class FadeInPullUpMenuAnimationManager : public MenuAnimationManager
+{
+    Q_OBJECT
+public:
+    explicit FadeInPullUpMenuAnimationManager(RoundMenu* menu, QObject* parent = nullptr);
+    void exec(const QPoint& pos) override;
+
+protected:
+    QPoint endPosition(const QPoint& pos) const override;
+
+private:
+    QPropertyAnimation* m_opacityAni;
+    QParallelAnimationGroup* m_aniGroup;
 };

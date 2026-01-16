@@ -6,6 +6,9 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_LINUX
+    qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
@@ -14,7 +17,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
-
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
     QApplication app(argc, argv);

@@ -2,6 +2,7 @@
 
 #include "QFluent/ListView.h"
 #include "QFluent/TableView.h"
+#include "QFluent/PagiNation.h"
 
 ViewInterface::ViewInterface(QWidget *parent)
     : GalleryInterface("视图", "", parent)
@@ -9,6 +10,7 @@ ViewInterface::ViewInterface(QWidget *parent)
     setObjectName("ViewInterface");
 
     auto tableWidget = new TableWidget(this);
+    tableWidget->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     tableWidget->setFixedSize(625, 440);
     tableWidget->verticalHeader()->hide();
     tableWidget->setBorderVisible(true);
@@ -48,6 +50,7 @@ ViewInterface::ViewInterface(QWidget *parent)
     addExampleCard("简单的表格组件", tableWidget);
 
     auto listWidget = new ListWidget(this);
+    listWidget->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     QStringList stands = {
         "安卓", "Android Auto", "Android TV", "内置 Google 的汽车",
         "谷歌浏览器", "Chromebook and ChromeOS", "联系人", "数字健康",
@@ -90,6 +93,12 @@ ViewInterface::ViewInterface(QWidget *parent)
     listFrame->setFixedSize(300, 400);
 
     addExampleCard("简单的列表组件", listFrame);
+
+    auto pagiNation = new PagiNation(this);
+    pagiNation->setAlign(Fluent::Alignment::Align_Left);
+    pagiNation->setPageSize(10);
+    pagiNation->setTotal(500);
+    addExampleCard("页码组件", pagiNation);
 }
 
 Frame::Frame(QWidget *parent)
@@ -103,7 +112,7 @@ Frame::Frame(QWidget *parent)
 
 void Frame::setupUI()
 {
-    hBoxLayout->setContentsMargins(0, 8, 0, 0);
+    hBoxLayout->setContentsMargins(0, 6, 0, 6);
     setObjectName("frame");
 }
 

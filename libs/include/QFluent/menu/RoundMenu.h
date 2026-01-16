@@ -40,14 +40,22 @@ public:
     void setDefaultAction(QAction *action);
 
     MenuActionListWidget *view() const;
+    void setView(MenuActionListWidget *view);
+
     void adjustMenuSize();
     int itemHeight() const;
 
     void setHideByClick(bool enabled);
 
     void hideMenu(bool isHideBySystem = false);
-    void exec(const QPoint &pos, bool animate = true,
+    virtual void exec(const QPoint &pos, bool animate = true,
               Fluent::MenuAnimation aniType = Fluent::MenuAnimation::DROP_DOWN);
+
+    QHBoxLayout *hBoxLayout() const;
+
+public slots:
+    void onItemClicked(QListWidgetItem *item);
+    void onItemEntered(QListWidgetItem *item);
 
 signals:
     void closed();

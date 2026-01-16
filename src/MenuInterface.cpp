@@ -21,6 +21,7 @@ MenuInterface::MenuInterface(QWidget *parent)
     shootTimeAction->setCheckable(true);
     modifiedTimeAction->setCheckable(true);
     nameAction->setCheckable(true);
+    createTimeAction->setChecked(true);
 
     auto actionGroup1 = new QActionGroup(this);
     actionGroup1->addAction(createTimeAction);
@@ -32,6 +33,7 @@ MenuInterface::MenuInterface(QWidget *parent)
     descendAction = new Action(FluentIcon(Fluent::IconType::DOWN).qicon(), "降序", this);
     ascendAction->setCheckable(true);
     descendAction->setCheckable(true);
+    ascendAction->setChecked(true);
 
     auto actionGroup2 = new QActionGroup(this);
     actionGroup2->addAction(ascendAction);
@@ -50,7 +52,6 @@ MenuInterface::MenuInterface(QWidget *parent)
     });
 
     addExampleCard("自定义组件菜单", btn2);
-
 
     auto btn3 = new PushButton("显示菜单", this);
     connect(btn3, &PushButton::clicked, this, [=](){
@@ -102,7 +103,7 @@ void MenuInterface::createCustomWidgetMenu(QPoint pos)
     auto menu = new RoundMenu("menu", this);
     auto card = new ProfileCard(":/res/Shizuka.png", "源静香", "shizuka@gmail.com", menu);
     menu->setItemHeight(36);
-    menu->view()->setMaxVisibleItems(0);
+
     menu->addWidget(card);
     menu->addSeparator();
     menu->addAction(new Action(FluentIcon(Fluent::IconType::PEOPLE).qicon(), "管理账户和设置"));
