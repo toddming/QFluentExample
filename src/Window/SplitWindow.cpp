@@ -13,11 +13,11 @@ using NIP = Fluent::NavigationItemPosition;
 SplitWidget::SplitWidget()
 {
 
-    setWindowButtonHints(Fluent::WindowButtonHint::Icon | Fluent::WindowButtonHint::Title |
-                         Fluent::WindowButtonHint::Minimize | Fluent::WindowButtonHint::Maximize |
-                         Fluent::WindowButtonHint::Close | Fluent::WindowButtonHint::RouteBack);
+    setWindowButtonHints(WindowButtonHint::WindowIcon | WindowButtonHint::Title |
+                         WindowButtonHint::Minimize | WindowButtonHint::Maximize |
+                         WindowButtonHint::Close | WindowButtonHint::RouteBack);
 
-    setWindowEffect(Fluent::WindowEffect::Normal);
+    setWindowEffect(WindowEffect::Normal);
 
     setContentsMargins(0, 0, 0, 0);
 
@@ -36,7 +36,12 @@ SplitWidget::SplitWidget()
     auto hBoxLayout = new QHBoxLayout();
     hBoxLayout->addWidget(m_navPanel);
     hBoxLayout->setSpacing(0);
+
+#if USE_QWINDOWKIT
     hBoxLayout->setContentsMargins(0, 48, 0, 0);
+#else
+    hBoxLayout->setContentsMargins(0, 5, 0, 0);
+#endif
 
     layout->addLayout(hBoxLayout, 0);
     layout->addWidget(m_stacked, 1);
